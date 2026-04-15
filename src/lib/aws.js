@@ -5,6 +5,7 @@ import {
   GetQueueAttributesCommand,
   GetQueueUrlCommand,
   ReceiveMessageCommand,
+  SendMessageBatchCommand,
   SendMessageCommand,
   SetQueueAttributesCommand,
   SQSClient,
@@ -62,6 +63,12 @@ export const sendJson = async (queueUrl, message) =>
     })
   );
 
+const toSendBatchEntries = (messages) =>
+  messages.map((message, index) => ({
+    Id: `msg-${index}`,
+    MessageBody: JSON.stringify(message),
+  }));
+
 export const receiveBatch = async (queueUrl, maxMessages, waitSeconds, visibilityTimeoutSeconds) => {
   const clampedMaxMessages = Math.max(1, Math.min(10, maxMessages));
   const result = await sqs.send(
@@ -106,6 +113,20 @@ export const deleteMessages = async (queueUrl, receiptHandles) => {
       new DeleteMessageBatchCommand({
         QueueUrl: queueUrl,
         Entries: toDeleteBatchEntries(handlesChunk),
+      })
+    );
+  }
+};
+
+export const sendJsonBatch = async (queueUrl, messages) => {
+  const validMessages = messages.filter(Boolean);
+  if (validMessages.length === 0) return;
+
+  for (const messagesChunk of chunk(validMessages, 10)) {
+    await sqs.send(
+      new SendMessageBatchCommand({
+        QueueUrl: queueUrl,
+        Entries: toSendBatchEntries(messagesChunk),
       })
     );
   }

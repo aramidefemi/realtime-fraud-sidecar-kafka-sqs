@@ -14,13 +14,3 @@
 
 This architecture scales by separating stages with queues, so each worker fleet (`intake`, `enrichment`, `scoring`) can scale independently based on its own load. Kafka absorbs upstream event spikes, SQS smooths downstream pressure, and DLQs isolate failures without blocking the rest of the pipeline.
 
-## Throughput (latest local run)
-
-- Run: `npm run sample:load` (`SAMPLE_COUNT=1000`, `SAMPLE_DUPLICATE_RATE=0.05`)
-- Producer done time: `17:11:18.668`
-- Last decision event time: `17:11:55.076`
-- Duration: `36.408s`
-- Unique events completed: `955`
-- Raw events sent: `1000`
-- Unique throughput: `955 / 36.408 = 26.2 msg/s`
-- Raw throughput: `1000 / 36.408 = 27.5 msg/s`

@@ -18,7 +18,8 @@
     "publisher:decision": "node src/services/decision-publisher.js",
     "replay:dlq": "node src/services/dlq-replay-tool.js",
     "dev:all": "node src/scripts/dev-all.js",
-    "test:all": "node --test tests/**/*.test.js"
+    "test:all": "node --test --test-concurrency=8 tests/**/*.test.js",
+    "test:e2e:1k": "node --test --test-concurrency=1 tests/load.good-10k.test.js"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch": "^3.1030.0",
