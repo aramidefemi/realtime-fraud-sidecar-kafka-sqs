@@ -1,0 +1,29 @@
+{
+  "name": "sqs-localstack-demo",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20 <24"
+  },
+  "scripts": {
+    "demo": "node index.js",
+    "bootstrap": "node src/scripts/bootstrap-queues.js",
+    "sample:send": "SAMPLE_PRESET=two-case node src/scripts/send-sample-events.js",
+    "sample:load": "SAMPLE_PRESET=random SAMPLE_COUNT=1000 SAMPLE_DUPLICATE_RATE=0.05 node src/scripts/send-sample-events.js",
+    "sample:dedupe": "SAMPLE_COUNT=30 SAMPLE_DUPLICATE_RATE=0.7 node src/scripts/send-sample-events.js",
+    "bridge": "node src/services/bridge-service.js",
+    "worker:intake": "node src/services/intake-worker.js",
+    "worker:enrichment": "node src/services/enrichment-worker.js",
+    "worker:scoring": "node src/services/scoring-worker.js",
+    "publisher:decision": "node src/services/decision-publisher.js",
+    "replay:dlq": "node src/services/dlq-replay-tool.js",
+    "dev:all": "node src/scripts/dev-all.js",
+    "test:all": "node --test tests/**/*.test.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch": "^3.1030.0",
+    "@aws-sdk/client-sqs": "^3.758.0",
+    "kafkajs": "^2.2.4",
+    "mongodb": "^7.1.1"
+  }
+}
